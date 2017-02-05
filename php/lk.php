@@ -7,125 +7,124 @@ session_start();
 require_once "db.php";
 
 
-$sql = $link->query("SELECT * FROM `users` WHERE id = '31'");
+$sql = $link->query("SELECT * FROM `users` WHERE id = '1'");
 
 while ($row = $sql -> fetch_array()) {
 	$arrayData = $row;
 }
-$img_room_array = explode(',', $arrayData['img_room']);
+
+$imgRoomAll = explode(',', $arrayData['img_room']);
 
 
 if (isset($_POST['go-lk'])) {
 
-	if (isset($_POST['login']) 
-		&& isset($_POST['first_name'])
-		&& isset($_POST['last_name'])
-		&& isset($_POST['email'])
-		&& isset($_POST['phone'])
-		&& isset($_POST['address'])
-		&& isset($_POST['info'])
-		) {
+	$textError = "";
+	$flagWell = true;
+
+	//проверка все ли поля заполнены
+	foreach ($_POST as $key => $value) {
+		if ($key != 'pass' && !isset($_POST[$key])) {
+			$flagWell = false;
+			break;
+		}
+	}
+
+	if (!$flagWell) {
+		$textError = "Заполните все обязательные поля!";
+	} else {
 
 		$login = trim(htmlspecialchars($_POST['login']));
-		$first_name = trim(htmlspecialchars($_POST['first_name']));
-		$last_name = trim(htmlspecialchars($_POST['last_name']));
-		$email = trim(htmlspecialchars($_POST['email']));
-		$phone = trim(htmlspecialchars($_POST['phone']));
-		$address = trim(htmlspecialchars($_POST['address']));
-		$info = trim(htmlspecialchars($_POST['info']));
-		$del = $_POST['del'];
 
-		$pass = $_POST['pass'] ? md5(trim(htmlspecialchars($_POST['pass']))) :  $arrayData['pass'];
-
-
-		if (isset($_POST['del'])) {
-			$del = $_POST['del'];
-
-		
-			for ($i = 0; $i < count($del); $i++) {
-
-					unset($img_room_array[$del[$i]]);
-
-			}
+		if ($login != $arrayData['login']) {
+			$link->query("SELECT login FROM `users` WHERE login = '{$login}'");
+			$flagWell = $link->affected_rows < 1;
 		}
-		$img_room_array = implode(',',$img_room_array);	
+		
+        if (!$flagWell) {
+        	$textError = "Пользователь с таким именем уже существует, попробуйте заного!";
+        } else {
+
+			$first_name = trim(htmlspecialchars($_POST['first_name']));
+			$last_name = trim(htmlspecialchars($_POST['last_name']));
+			$email = trim(htmlspecialchars($_POST['email']));
+			$phone = trim(htmlspecialchars($_POST['phone']));
+			$address = trim(htmlspecialchars($_POST['address']));
+			$info = trim(htmlspecialchars($_POST['info']));
+			$pass = $_POST['pass'] ? md5(trim(htmlspecialchars($_POST['pass']))) :  $arrayData['pass'];
+
+			$avatar = $_FILES['avatar'];
+			$img_room = $_FILES['img_room'];
 
 
-		$avatar = $_FILES['avatar'];
-		$img_room = $_FILES['img_room'];
+			if (isset($_POST['del'])) {
+				$del = $_POST['del'];
+				foreach ($del as $key => $value) {
+					unlink(iconv('UTF-8', 'windows-1251', $imgRoomAll[$value]));
+					unset($imgRoomAll[$value]);
+				}
+			}
 
+			$imgRoomAll = implode(',', $imgRoomAll);	
+		//Добавление фотографий квартиры
 		if (!$img_room['name'][0]) {
 
 			echo "Изображений нет";
-			$imgRoom_name_arr = $img_room_array;
 
 		} else {
 
-			echo "Изображение есть";
+			echo "Изображение(я) есть";
+
 
 			$imgRoomDir = "users/img-room";
+			$imgRoom_name_arr = "";
 			@mkdir($imgRoomDir, 0777);
 
-			if (count($img_room['name']) > 1) {
+			for ($i = 0; $i < count($img_room['name']); $i++) {
 
-			echo "Изображений больше 1";
-
-				for ($i = 0; $i < count($img_room['name']); $i++) {
-
-					$imgRoom_tmp = $img_room['tmp_name'][$i];
-
-					if (is_uploaded_file($imgRoom_tmp)) {
-
-						$imgRoom_name = iconv(mb_detect_encoding( basename($img_room['name'][$i])),'UTF-8',"$imgRoomDir/".basename($img_room['name'][$i]));
-
-						move_uploaded_file($imgRoom_tmp, $imgRoom_name);
-					}
-
-					$imgRoom_name_arr .= $imgRoom_name.",";
-				}
-
-			} else {
-
-				echo "Изображение одно";
-
-				$imgRoom_tmp = $img_room['tmp_name'][0];
+				$imgRoom_tmp = $img_room['tmp_name'][$i];
 
 				if (is_uploaded_file($imgRoom_tmp)) {
 
-					$imgRoom_name_arr = iconv(mb_detect_encoding( basename($img_room['name'][0])),'UTF-8',"$imgRoomDir/".basename($img_room['name'][0]));
+					$imgRoom_name = iconv(mb_detect_encoding( basename($img_room['name'][$i])),'windows-1251',"$imgRoomDir/$login-".basename($img_room['name'][$i]));
 
-					move_uploaded_file($imgRoom_tmp, $imgRoom_name_arr);
+					while (file_exists($imgRoom_name)) {
+						$exp = strrpos($imgRoom_name, '.');
+						$imgRoom_name = substr($imgRoom_name, 0, $exp)."-".rand(1 , 1000000000).substr($imgRoom_name, $exp);
+					}
+
+					//загружаем файл с названием вида логин-исходное_название_изображения[-рандомное число].расширение
+					move_uploaded_file($imgRoom_tmp, $imgRoom_name);
+
+					$imgRoom_name = iconv('windows-1251', 'UTF-8', $imgRoom_name);
 				}
-
-
-				$imgRoom_name_arr .= ",".$img_room_array;
-
+				//если это первый элемент, то не ставим перед ним запятую
+				$imgRoomAll = $imgRoom_name.",".$imgRoomAll;
 			}
 		}
 
-		if ($avatar['tmp_name']) {
+		//Добавление аватарки
+		if (!$avatar['name']) {
 
+			$avatar_name = $arrayData['avatar'];
+
+		} else {
+			
 			$avatarDir = "users/avatar";
-
 			@mkdir($avatarDir, 0777);
-
 			$avatar_tmp = $avatar['tmp_name'];
 
 			if (is_uploaded_file($avatar_tmp)) {
 
-				$avatar_name = iconv(mb_detect_encoding( basename($avatar['name'])),'UTF-8',"$avatarDir/".basename($avatar['name']));
+				unlink(iconv('UTF-8', 'windows-1251', $arrayData['avatar']));
+
+				$avatar_name = iconv(mb_detect_encoding( basename($avatar['name'])),'windows-1251',"$avatarDir/$login-".basename($avatar['name']));
 				move_uploaded_file($avatar_tmp, $avatar_name);
-
+				$avatar_name =iconv('windows-1251', 'UTF-8', $avatar_name);
 			}
-
-		} else {
-
-			$avatar_name = $arrayData['avatar'];
-
 		}
 
 
-		$link2 = $link->query("UPDATE `users` SET login = '{$login}', first_name = '{$first_name}', last_name='{$last_name}', email='{$email}', phone='{$phone}', pass='{$pass}', avatar='{$avatar_name}', address='{$address}', img_room='{$imgRoom_name_arr}', info='{$info}' WHERE id='31'");
+		$link2 = $link->query("UPDATE `users` SET login = '{$login}', first_name = '{$first_name}', last_name='{$last_name}', email='{$email}', phone='{$phone}', pass='{$pass}', avatar='{$avatar_name}', address='{$address}', img_room='{$imgRoomAll}', info='{$info}' WHERE id='1'");
 		
 		if ($link2) {
 			echo "Отправка выполнена";
@@ -134,5 +133,6 @@ if (isset($_POST['go-lk'])) {
 		}
 	}
 }
-
+echo $textError;
+}
 		
