@@ -55,6 +55,7 @@ if (isset($_POST['go-signup'])) {
 						$imgRoom_name = iconv(mb_detect_encoding( basename($img_room['name'][$i])),'windows-1251',"$imgRoomDir/".basename($img_room['name'][$i]));
 
 						move_uploaded_file($imgRoom_tmp, $imgRoom_name);
+						$imgRoom_name =iconv('windows-1251', 'UTF-8', $imgRoom_name);
 					}
 
 					$imgRoom_name_arr .= $imgRoom_name.",";
@@ -71,6 +72,7 @@ if (isset($_POST['go-signup'])) {
 					$imgRoom_name_arr = iconv(mb_detect_encoding( basename($img_room['name'][0])),'windows-1251',"$imgRoomDir/".basename($img_room['name'][0]));
 
 					move_uploaded_file($imgRoom_tmp, $imgRoom_name_arr);
+					$imgRoom_name_arr =iconv('windows-1251', 'UTF-8', $imgRoom_name_arr);
 				}
 
 			}
@@ -88,7 +90,7 @@ if (isset($_POST['go-signup'])) {
 
 				$avatar_name = iconv(mb_detect_encoding( basename($avatar['name'])),'windows-1251',"$avatarDir/".basename($avatar['name']));
 				move_uploaded_file($avatar_tmp, $avatar_name);
-
+				$avatar_name =iconv('windows-1251', 'UTF-8', $avatar_name);
 			}
 
 		}
