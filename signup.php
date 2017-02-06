@@ -1,26 +1,4 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<link rel="stylesheet" type="text/css" href="/module4/styles.css">
-		<title>Регистрация</title>
-	</head>
-	<body>
-		<header>
-			<div class="content">
-				<div class="right">
-					<div class="container">
-						<a href="/module4/login.php"><span>Вход</span></a>
-						<a href="/module4/signup.php"><span>Регистрация</span></a>
-					</div>
-				</div>
-				<div class="left">
-					<a href="/module4/index.php"><span class="logo">Тур-жильё</span></a>
-					<a href="/module4/search.php"><span>Найти вписку</span></a>
-					<a href="/module4/lk.php"><span>Личный кабинет</span></a>
-				</div>
-			</div>
-		</header>
+<?php require("header.php"); ?>
 		<div id="content">
 			<div class="listCard list-full">
 				<div class="title">Зарегистрируйтесь для доступа к личному кабинету</div>

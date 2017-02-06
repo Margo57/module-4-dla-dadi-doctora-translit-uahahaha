@@ -1,13 +1,9 @@
+<?php require("header.php"); ?>
 <?php 
+$idUser = $_GET['idUser'] ? $_GET['idUser'] : false; //берём id пользователя на страницу которого перешли
+$idAuthor = $_SESSION['user_id']; //берём id пользователя из сессии
 
-header("Content-type: text/html; charset=utf8");
-
-//session_start();
-
-require_once "./php/db.php";
-
-$idUser = 2; //берём id пользователя на страницу которого перешли
-$idAuthor = 3; //берём id пользователя из сессии
+if (!isset($idUser)) header("Location: /module4/search.php");
 
 //выборка данных о пользователе
 $sql = $link->query("SELECT  first_name, last_name, email, phone, avatar, address, img_room, info, rating, comments_sum  FROM users WHERE id='{$idUser}'");
@@ -17,7 +13,7 @@ while ($row = $sql -> fetch_assoc()) {
 $dataUser['img_room'] = explode(',', $dataUser['img_room']);
 
 //выборка комментариев пользователю
-$sql = $link->query("SELECT text_comment, time_comment, first_name, last_name, avatar FROM comments, users WHERE comments.id_author=users.id AND comments.id_user='{$idUser}' ORDER BY time_comment");
+$sql = $link->query("SELECT text_comment, time_comment, first_name, last_name, avatar, rating_user_selected FROM comments, users WHERE comments.id_author=users.id AND comments.id_user='{$idUser}' ORDER BY time_comment");
 
 if ($link->affected_rows >= 1) {
 	while ($row = $sql -> fetch_all(MYSQLI_ASSOC)) {
@@ -26,29 +22,6 @@ if ($link->affected_rows >= 1) {
 }
 
 ?>
-
-<!DOCTYPE html>
-<html>
-	<head>
-		<link rel="stylesheet" type="text/css" href="/module4/styles.css">
-		<title>Профиль пользователя</title>
-	</head>
-	<body>
-		<header>
-			<div class="content">
-				<div class="right">
-					<div class="container">
-						<a href="/module4/login.php"><span>Вход</span></a>
-						<a href="/module4/signup.php"><span>Регистрация</span></a>
-					</div>
-				</div>
-				<div class="left">
-					<a href="/module4/index.php"><span class="logo">Тур-жильё</span></a>
-					<a href="/module4/search.php"><span>Найти вписку</span></a>
-					<a href="/module4/lk.php"><span>Личный кабинет</span></a>
-				</div>
-			</div>
-		</header>
 		<div id="content">
 			<div class="listCard list-full">
 				<div class="title">Профиль пользователя</div>

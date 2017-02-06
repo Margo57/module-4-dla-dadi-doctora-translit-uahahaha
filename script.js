@@ -10,5 +10,5 @@ $(document).ready(function(){
 		if(a != "block")
 			return $(".profileInfo").fadeIn(500);
 		return $(".profileInfo").fadeOut(300);
-	})
+	});
 });

@@ -1,13 +1,7 @@
-<?php 
+<?php require("header.php"); ?>
+<?php
 
-header("Content-type: text/html; charset=utf8");
-
-//session_start();
-
-require_once "./php/db.php";
-
-
-$sql = $link->query("SELECT * FROM `users` WHERE id = '1'");
+$sql = $link->query("SELECT * FROM `users` WHERE id = '{$_SESSION['user_id']}'");
 
 while ($row = $sql -> fetch_array()) {
 	$arrayData = $row;
@@ -17,28 +11,6 @@ while ($row = $sql -> fetch_array()) {
 $imgRoomAll = explode(',', $arrayData['img_room']);
 ?>
 
-<!DOCTYPE html>
-<html>
-	<head>
-		<link rel="stylesheet" type="text/css" href="/module4/styles.css">
-		<title>Личный кабинет</title>
-	</head>
-	<body>
-	<header>
-			<div class="content">
-				<div class="right">
-					<div class="container">
-						<a href="/module4/login.php"><span>Вход</span></a>
-						<a href="/module4/signup.php"><span>Регистрация</span></a>
-					</div>
-				</div>
-				<div class="left">
-					<a href="/module4/index.php"><span class="logo">Тур-жильё</span></a>
-					<a href="/module4/search.php"><span>Найти вписку</span></a>
-					<a href="/module4/lk.php"><span>Личный кабинет</span></a>
-				</div>
-			</div>
-		</header>
 		<div id="content">
 			<div class="listCard list-full">
 				<div class="title editInfoTitle">Редактирование личной информации</div>

@@ -1,7 +1,7 @@
 <?php 
 
-$link = mysqli_connect('localhost', 'root', '111208', 'module4') or die(mysqli_error($link));
+$link = new mysqli('localhost', 'root', '111208', 'module4');
 
-mysqli_set_charset($link, "utf8") or die(mysqli_error($link));
+$link->set_charset("utf8");
 
  ?>
