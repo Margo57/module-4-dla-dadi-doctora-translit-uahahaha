@@ -63,8 +63,9 @@ if (isset($_POST['go-lk'])) {
 					unset($imgRoomAll[$value]);
 				}
 			}
-
+			if (end($imgRoomAll) == '') array_pop($imgRoomAll);
 			$imgRoomAll = implode(',', $imgRoomAll);	
+
 		//Добавление фотографий квартиры
 		if (!$img_room['name'][0]) {
 

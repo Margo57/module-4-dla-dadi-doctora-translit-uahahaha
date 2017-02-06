@@ -31,7 +31,7 @@ if (isset($_POST['go-signup'])) {
 		$link->query("SELECT login FROM `users` WHERE login = '{$login}'");
 		$flagWell = $link->affected_rows < 1;
 		
-        if ($flagWell) {
+        if (!$flagWell) {
         	$textError = "Пользователь с таким именем уже существует, попробуйте заного!";
         } else {
 

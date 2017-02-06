@@ -2,7 +2,7 @@
 
 header("Content-type: text/html; charset=utf8");
 
-session_start();
+//session_start();
 
 require_once "./php/db.php";
 
