@@ -93,7 +93,7 @@ while ($row = $sql -> fetch_all(MYSQLI_ASSOC)) {
 										<?php endif;?>
 									<?php endforeach;?>
 								</div>
-								<div class="msg_send"><a href="#">Отправить сообщение</a></div>
+								<?php if ($user['id'] != $idAuthor) :?><div class="msg_send"><a href="/module4/message.php?idUser=<?=$user['id'];?>">Отправить сообщение</a></div><?php endif;?>
 							</div>
 						</div>
 					<?php endforeach;?>

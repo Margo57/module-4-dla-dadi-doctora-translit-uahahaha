@@ -1,14 +1,26 @@
 <?php require("header.php"); ?>
 <?php
 
-$sql = $link->query("SELECT * FROM `users` WHERE id = '{$_SESSION['user_id']}'");
+$idAuthor = $_SESSION['user_id']; //берём id пользователя из сессии
+
+
+$sql = $link->query("SELECT * FROM `users` WHERE id = '{$idAuthor}'");
 
 while ($row = $sql -> fetch_array()) {
 	$arrayData = $row;
 }
 
-
 $imgRoomAll = explode(',', $arrayData['img_room']);
+
+//выборка сообщений диалога
+$sql = $link->query("SELECT first_name, last_name, avatar, text_message, time_message FROM messages, users WHERE users.id=messages.id_author AND messages.id_author = '{$idAuthor}' OR users.id=messages.id_author AND messages.id_user = '{$idAuthor}' ORDER BY time_message DESC");
+
+if ($link->affected_rows >= 1) {
+	while ($row = $sql -> fetch_all(MYSQLI_ASSOC)) {
+		$dataMessages = $row;
+	}
+}
+
 ?>
 
 		<div id="content">
@@ -53,78 +65,22 @@ $imgRoomAll = explode(',', $arrayData['img_room']);
 				<div class="title">Сообщения</div>
 				<div class="item hr_bottom"></div>
 				<div class="item left item-full">
-					<div class="msg_item">
-						<div class="msg_right">11:13</div>
-						<div class="msg_left">
-							<div class="msg_img">
-								<img src="/module4/img/cat.jpg">
+					<?php if (isset($dataMessages)) :?>
+						<?php foreach ($dataMessages as $messages => $message) :?>
+						<div class="msg_item">
+							<div class="msg_right"><?=$message['time_message'];?></div>
+							<div class="msg_left">
+								<div class="msg_img">
+									<img src="/module4/php/<?=$message['avatar'];?>" alt="<?=$message['first_name']."-".$message['last_name'];?>">
+								</div>
+							</div>
+							<div class="msg_center">
+								<div class="msg_from"><?=$message['first_name']." ".$message['last_name'];?></div>
+								<div class="msg_text"><?=$message['text_message'];?></div>
 							</div>
 						</div>
-						<div class="msg_center">
-							<div class="msg_from">Ваня Стручков</div>
-							<div class="msg_text">Привет, очень нравится твоя хата, можешь приютить?</div>
-						</div>
-					</div>
-					<div class="msg_item">
-						<div class="msg_right">11:13</div>
-						<div class="msg_left">
-							<div class="msg_img">
-								<img src="/module4/img/cat2.jpg">
-							</div>
-						</div>
-						<div class="msg_center">
-							<div class="msg_from">Ваня Стручков</div>
-							<div class="msg_text">Привет, очень нравится твоя хата, можешь приютить?</div>
-						</div>
-					</div>
-					<div class="msg_item">
-						<div class="msg_right">11:13</div>
-						<div class="msg_left">
-							<div class="msg_img">
-								<img src="/module4/img/cat.jpg">
-							</div>
-						</div>
-						<div class="msg_center">
-							<div class="msg_from">Ваня Стручков</div>
-							<div class="msg_text">Привет, очень нравится твоя хата, можешь приютить?</div>
-						</div>
-					</div>
-					<div class="msg_item">
-						<div class="msg_right">11:13</div>
-						<div class="msg_left">
-							<div class="msg_img">
-								<img src="/module4/img/cat2.jpg">
-							</div>
-						</div>
-						<div class="msg_center">
-							<div class="msg_from">Ваня Стручков</div>
-							<div class="msg_text">Привет, очень нравится твоя хата, можешь приютить?</div>
-						</div>
-					</div>
-					<div class="msg_item">
-						<div class="msg_right">11:13</div>
-						<div class="msg_left">
-							<div class="msg_img">
-								<img src="/module4/img/cat.jpg">
-							</div>
-						</div>
-						<div class="msg_center">
-							<div class="msg_from">Ваня Стручков</div>
-							<div class="msg_text">Привет, очень нравится твоя хата, можешь приютить?</div>
-						</div>
-					</div>
-					<div class="msg_item">
-						<div class="msg_right">11:13</div>
-						<div class="msg_left">
-							<div class="msg_img">
-								<img src="/module4/img/cat2.jpg">
-							</div>
-						</div>
-						<div class="msg_center">
-							<div class="msg_from">Ваня Стручков</div>
-							<div class="msg_text">Привет, очень нравится твоя хата, можешь приютить?</div>
-						</div>
-					</div>
+					<?php endforeach;?>
+				<?php endif; ?>
 				</div>
 			</div>
 		</div>

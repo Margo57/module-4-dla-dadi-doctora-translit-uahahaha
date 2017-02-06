@@ -13,12 +13,12 @@ while ($row = $sql -> fetch_assoc()) {
 $dataUser['img_room'] = explode(',', $dataUser['img_room']);
 $dataUser['rating_user_selected'] = explode(',', $dataUser['rating_user_selected']);
 
-//выборка комментариев пользователю
-$sql = $link->query("SELECT text_comment, time_comment, first_name, last_name, avatar, rating_user_selected FROM comments, users WHERE comments.id_author=users.id AND comments.id_user='{$idUser}' ORDER BY time_comment DESC");
+//выборка сообщений диалога
+$sql = $link->query("SELECT first_name, last_name, avatar, text_message, time_message FROM messages, users WHERE users.id=messages.id_author AND messages.id_author = '{$idAuthor}' AND messages.id_user = '{$idUser}' OR users.id=messages.id_author AND messages.id_author = '{$idUser}' AND messages.id_user = '{$idAuthor}' ORDER BY time_message DESC");
 
 if ($link->affected_rows >= 1) {
 	while ($row = $sql -> fetch_all(MYSQLI_ASSOC)) {
-		$dataComments = $row;
+		$dataMessages = $row;
 	}
 }
 
@@ -79,38 +79,38 @@ if ($link->affected_rows >= 1) {
 										<?php endif;?>
 									<?php endforeach;?>
 								</div>
-								<div class="msg_send"><a href="/module4/message.php?idUser=<?=$idUser;?>">Отправить сообщение</a></div>
+								<div class="msg_send"><a href="#">Отправить сообщение</a></div>
 							</div>
 						</div>
 				</div>
 			</div>
 			<div class="listCard list-full">
-				<div class="title">Комментарии</div>
+				<div class="title">Диалог с пользователем</div>
 				<div class="item hr_bottom"></div>
 				<div class="item left item-full">
-					<form class="send_comments" id="form-comment" method="POST" action="/module4/php/comments.php" >
+					<form class="send_comments" id="form-message" method="POST" action="/module4/php/message.php" >
 						<input type="hidden" name="id_user" value="<?=$idUser;?>">
 						<input type="hidden" name="id_author" value="<?=$idAuthor;?>">
-						<textarea placeholder="Введите комментарий" name="text_comment" require></textarea>
-						<input type="submit" value="Отправить" name="go-comment">
+						<textarea placeholder="Введите сообщение" name="text_message" require></textarea>
+						<input type="submit" value="Отправить" name="go-message">
 					</form>
-					<?php if (isset($dataComments)) :?>
-						<?php foreach ($dataComments as $comments => $comment) :?>
+					<?php if (isset($dataMessages)) :?>
+						<?php foreach ($dataMessages as $messages => $message) :?>
 						<div class="msg_item">
-							<div class="msg_right"><?=$comment['time_comment'];?></div>
+							<div class="msg_right"><?=$message['time_message'];?></div>
 							<div class="msg_left">
 								<div class="msg_img">
-									<img src="/module4/php/<?=$comment['avatar'];?>" alt="<?=$comment['first_name']."-".$$comment['last_name'];?>">
+									<img src="/module4/php/<?=$message['avatar'];?>" alt="<?=$message['first_name']."-".$message['last_name'];?>">
 								</div>
 							</div>
 							<div class="msg_center">
-								<div class="msg_from"><?=$comment['first_name']." ".$comment['last_name'];?></div>
-								<div class="msg_text"><?=$comment['text_comment'];?></div>
+								<div class="msg_from"><?=$message['first_name']." ".$message['last_name'];?></div>
+								<div class="msg_text"><?=$message['text_message'];?></div>
 							</div>
 						</div>
 					<?php endforeach;?>
 				<?php else: ?>
-					<p>У этого пользователя ещё нет коменнтариев. Оставьте первый комментарий.</p>
+					<p>У вас ещё нет диалога с данным пользователем. Оставьте первое сообщение.</p>
 				<?php endif; ?>
 				</div>
 			</div>

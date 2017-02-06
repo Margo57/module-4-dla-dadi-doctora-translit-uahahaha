@@ -1,9 +1,9 @@
--- phpMyAdmin SQL Dump
+﻿-- phpMyAdmin SQL Dump
 -- version 4.6.5.2
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Фев 06 2017 г., 14:30
+-- Время создания: Фев 06 2017 г., 17:54
 -- Версия сервера: 10.1.21-MariaDB
 -- Версия PHP: 7.0.15
 

@@ -1,9 +1,9 @@
--- phpMyAdmin SQL Dump
+﻿-- phpMyAdmin SQL Dump
 -- version 4.6.5.2
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Фев 06 2017 г., 14:30
+-- Время создания: Фев 06 2017 г., 17:55
 -- Версия сервера: 10.1.21-MariaDB
 -- Версия PHP: 7.0.15
 
@@ -51,7 +51,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `login`, `first_name`, `last_name`, `email`, `phone`, `pass`, `avatar`, `address`, `img_room`, `info`, `rating`, `rating_sum`, `rating_user_selected`, `comments_sum`) VALUES
 (1, 'rita', 'Маргарита', 'Вербицкая', 'rita070597@gmail.com', '79185145094', '81dc9bdb52d04dc20036dbd8313ed055', 'users/avatar/rita-плашки-02.png', '40-лет Победы, 2', 'users/img-room/rita-плашки-12.png,users/img-room/rita-плашки-08.png', 'Информация обо мне', 5, 2, '1,2', 3),
 (2, 'login', 'Иван', 'Иванович', 'dk@insitu.by', '79185145094', 'd93591bdf7860e1e4ee2fca799911215', 'users/avatar/плашки-03.png', '40-лет Победы, 1', 'users/img-room/login-плашки-05.png,users/img-room/login-плашки-04.png,users/img-room/login-плашки-03.png', 'Инфо', 5, 1, '1', 5),
-(3, 'moonbegg', 'Марина', 'Морозова', 'margo0705rksi@gmail.com', '+7 (918) 514-50-94', '6074c6aa3488f3c2dddff2a7ca821aab', 'users/avatar/moonbegg-плашки-07.png', 'Адрес', 'users/img-room/moonbegg-плашки-02.png,users/img-room/moonbegg-плашки-03.png', 'Ьщщтиупп', 5, 1, '2', 1),
+(3, 'moonbegg', 'Марина', 'Морозова', 'margo0705rksi@gmail.com', '+7 (918) 514-50-94', '6074c6aa3488f3c2dddff2a7ca821aab', 'users/avatar/moonbegg-плашки-07.png', 'Адрес', 'users/img-room/moonbegg-плашки-02.png,users/img-room/moonbegg-плашки-03.png', 'Ьщщтиупп', 5, 2, '2,1', 1),
 (4, 'rita0705', 'Маргарита', 'Вербицкая', 'ritav161@mail.ru', '+7 (918) 514-50-94', 'd79c8788088c2193f0244d8f1f36d2db', 'users/avatar/rita0705-oop.jpg', 'Адрес', 'users/img-room/rita0705-плашки-02.png,users/img-room/rita0705-плашки-03.png', 'Информация', 5, 1, '2', 0),
 (5, 'rita070597', 'Маргарита', 'Вербицкая', 'ritav161@mail.ru', '+7 (918) 514-50-94', 'dbc4d84bfcfe2284ba11beffb853a8c4', 'users/avatar/rita070597-oop.jpg', 'Адрес', 'users/img-room/rita070597-плашки-02.png,users/img-room/rita070597-плашки-03.png', 'Информация', 0, 0, '', 0);
 
