@@ -1,4 +1,12 @@
 <?php require("header.php"); ?>
+<?php 
+
+if ($authorization) {
+	header('Location: /module4/index.php');
+} else {
+	session_destroy();
+}
+?>
 		<div id="content">
 			<div class="listCard list-full">
 				<div class="title">Зарегистрируйтесь для доступа к личному кабинету</div>

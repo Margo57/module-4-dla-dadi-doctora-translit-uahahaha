@@ -13,14 +13,13 @@ while ($row = $sql -> fetch_array()) {
 $imgRoomAll = explode(',', $arrayData['img_room']);
 
 //выборка сообщений диалога
-$sql = $link->query("SELECT first_name, last_name, avatar, text_message, time_message FROM messages, users WHERE users.id=messages.id_author AND messages.id_author = '{$idAuthor}' OR users.id=messages.id_author AND messages.id_user = '{$idAuthor}' ORDER BY time_message DESC");
+$sql = $link->query("SELECT users.id, first_name, last_name, avatar, text_message, time_message FROM messages, users WHERE users.id=messages.id_author AND messages.id_author = '{$idAuthor}' OR users.id=messages.id_author AND messages.id_user = '{$idAuthor}' ORDER BY time_message DESC");
 
 if ($link->affected_rows >= 1) {
 	while ($row = $sql -> fetch_all(MYSQLI_ASSOC)) {
 		$dataMessages = $row;
 	}
 }
-
 ?>
 
 		<div id="content">
@@ -29,7 +28,7 @@ if ($link->affected_rows >= 1) {
 				<div class="item hr_bottom"></div>
 				<div class="item left item-full editInfo">
 						<img src="/module4/php/<?=$arrayData['avatar'];?>" alt="Ваша аватарка" class="avatar" width="250px">
-						<div class="delAcc"><a href="/module4/deleteAccount" class="button">Удалить страницу</a></div>
+						<div class="delAcc"><button onclick="confirm('Вы действительно хотите выйти?') ? location.href = '/module4/php/deleteAccount.php' : false;" class="button">Удалить страницу</button></div>
 
 						<div class="houses">
 							<?php foreach ($imgRoomAll as $key => $value) :?>
@@ -67,6 +66,9 @@ if ($link->affected_rows >= 1) {
 				<div class="item left item-full">
 					<?php if (isset($dataMessages)) :?>
 						<?php foreach ($dataMessages as $messages => $message) :?>
+						<?php if ($message['id'] != $idAuthor) :?>
+							<a href="/module4/message.php?idUser=<?=$message['id'];?>">
+						<?php endif; ?>
 						<div class="msg_item">
 							<div class="msg_right"><?=$message['time_message'];?></div>
 							<div class="msg_left">
@@ -79,6 +81,7 @@ if ($link->affected_rows >= 1) {
 								<div class="msg_text"><?=$message['text_message'];?></div>
 							</div>
 						</div>
+						<?php if ($message['id'] != $idAuthor) :?></a><?php endif; ?>
 					<?php endforeach;?>
 				<?php endif; ?>
 				</div>

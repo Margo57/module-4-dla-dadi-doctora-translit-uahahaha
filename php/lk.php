@@ -4,12 +4,6 @@ header("Content-type: text/html; charset=utf8");
 
 require_once "db.php";
 
-session_start();
-$authorization = false;
-if (isset($_SESSION['user_id'])){
-	$authorization = true;
-}
-
 $sql = $link->query("SELECT * FROM `users` WHERE id = '1'");
 
 while ($row = $sql -> fetch_array()) {

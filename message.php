@@ -79,7 +79,6 @@ if ($link->affected_rows >= 1) {
 										<?php endif;?>
 									<?php endforeach;?>
 								</div>
-								<div class="msg_send"><a href="#">Отправить сообщение</a></div>
 							</div>
 						</div>
 				</div>

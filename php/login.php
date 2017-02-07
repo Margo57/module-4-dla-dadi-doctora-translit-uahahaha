@@ -4,8 +4,6 @@ header("Content-type: text/html; charset=utf8");
 
 require_once "db.php";
 
-session_start();
-
 if (isset($_POST['go-login'])) {
 
 
@@ -23,7 +21,7 @@ if (isset($_POST['go-login'])) {
         if ($link->affected_rows != 1) {
         	header("Location: /module4/login.php");
 		} else {
-			echo "Вход выполнен";
+			session_start();
 			$_SESSION['user_id'] = $dataUser['id'];
 			$_SESSION['user_login'] = $dataUser['login'];
 			header("Location: /module4/lk.php");

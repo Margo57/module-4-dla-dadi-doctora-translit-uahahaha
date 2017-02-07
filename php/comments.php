@@ -2,8 +2,6 @@
 
 header("Content-type: text/html; charset=utf8");
 
-//session_start();
-
 require_once "db.php";
 
 if (isset($_POST['go-comment'])) {

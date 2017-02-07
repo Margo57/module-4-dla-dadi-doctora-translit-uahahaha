@@ -3,6 +3,7 @@
 $idUser = $_GET['idUser'] ? $_GET['idUser'] : false; //берём id пользователя на страницу которого перешли
 $idAuthor = $_SESSION['user_id']; //берём id пользователя из сессии
 
+
 if (!$idUser) header("Location: /module4/search.php");
 
 //выборка данных о пользователе
@@ -21,7 +22,11 @@ if ($link->affected_rows >= 1) {
 		$dataComments = $row;
 	}
 }
-
+$itemSum = isset($_POST['itemSum']) ? $_POST['itemSum'] : 3;
+$page = isset($_GET['page']) ? $_GET['page'] : 1;
+$itemSumPage = ceil(count($dataComments) / $itemSum);
+$min = $page * $itemSum - $itemSum;
+$max = $page * $itemSum - 1;
 ?>
 <style type="text/css">
 	#content .form-rating {
@@ -94,8 +99,9 @@ if ($link->affected_rows >= 1) {
 						<textarea placeholder="Введите комментарий" name="text_comment" require></textarea>
 						<input type="submit" value="Отправить" name="go-comment">
 					</form>
-					<?php if (isset($dataComments)) :?>
+					<?php if (isset($dataComments)) : ?>
 						<?php foreach ($dataComments as $comments => $comment) :?>
+						<?php if ($min <= $comments && $comments <= $max) : ?>
 						<div class="msg_item">
 							<div class="msg_right"><?=$comment['time_comment'];?></div>
 							<div class="msg_left">
@@ -108,10 +114,36 @@ if ($link->affected_rows >= 1) {
 								<div class="msg_text"><?=$comment['text_comment'];?></div>
 							</div>
 						</div>
+					<?php endif; ?>
 					<?php endforeach;?>
+					<ul class="pagination">
+						<?php if ($page != 1) :?>
+							<li><a href="?idUser=<?=$idUser?>&page=1">В начало</a></li>
+							<li><a href="?idUser=<?=$idUser?>&page=<?= $page-1;?>">Назад</a></li>
+						<?php endif; ?>
+
+						<?php for ($i = 1; $i <= $itemSumPage; $i++) :?>
+							<li><a href="?idUser=<?=$idUser?>&page=<?=$i;?>"><?=$i;?></a></li>
+						<?php endfor; ?>
+
+						<?php if ($page != $itemSumPage) :?>
+							<li><a href="?idUser=<?=$idUser?>&page=<?= $page+1;?>">Вперёд</a></li>
+							<li><a href="?idUser=<?=$idUser?>&page=<?=$itemSumPage;?>">В конец</a></li>
+						<?php endif; ?>
+					</ul>
+					<form method="post" action="">
+						<select name="itemSum"  onchange="form.submit();">
+							<?php for ($i = 2; $i < 9; $i++) : ?>
+								<option value="<?=$i;?>" <?php if ($i == $itemSum) :?>selected<?php endif;?>><?=$i;?></option>
+							<?php endfor; ?>
+						</select>
+					</form>
 				<?php else: ?>
 					<p>У этого пользователя ещё нет коменнтариев. Оставьте первый комментарий.</p>
 				<?php endif; ?>
+
+
+
 				</div>
 			</div>
 		</div>

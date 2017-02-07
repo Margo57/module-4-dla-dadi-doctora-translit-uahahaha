@@ -1,4 +1,9 @@
 <?php require("header.php"); ?>
+<?php 
+if (!$authorization) {
+	session_destroy();
+}
+?>
 		<div id="content">
 			<?php if (!$authorization): ?>
 				<div class="listCard list-full">
